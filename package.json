@@ -1,0 +1,19 @@
+{
+    "name": "io.redstart.letterboxer",
+    "displayName": "Letter Boxer",
+    "version": "1.0.0",
+    "unity": "2021.2",
+    "description": "A tool that enforces the aspect ratio of the game by auto-resizing camera viewport.",
+    "dependencies": {},
+    "author": {
+        "name": "Redstart Interactive",
+        "url": "https://github.com/redstartinteractive"
+    },
+    "samples": [
+        {
+            "displayName": "Shooting Gallery",
+            "description": "Sample scene that includes the letter boxer.",
+            "path": "Samples~/ShootingGallery"
+        }
+    ]
+}

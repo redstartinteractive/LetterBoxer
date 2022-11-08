@@ -1,14 +1,13 @@
 # Letter Boxer
 
 * Preserve your 2D game's aspect ratio with no effort
-* Works with any orthographic camera
 * Works on mobile devices
 * Works with Unity UI canvas
-* Include's "Shooting Gallery" mini-game example
+* Does not rely on any UI framework to render letter boxes
 
-**Download lastest Unity package from [releases](https://github.com/rabidgremlin/LetterBoxer/releases)**
+### Set up the Letter Boxer
+1. Attach the `Letter Boxer` script to your game camera
 
-![Overview](./Docgen/Documentation/Slide2.PNG)
-![Setup the Component](./Docgen/Documentation/Slide3.PNG)
-![Advanced configuration](./Docgen/Documentation/Slide4.PNG)
-![Works with Unity UI](./Docgen/Documentation/Slide5.PNG)
+### Set up the UI to scale with the letterboxed camera
+1. Select your Canvas and set the `Render Mode` to `Screen Space - Camera`
+2. Set the `Render Camera` to the camera that has the `Letter Boxer` script attached
