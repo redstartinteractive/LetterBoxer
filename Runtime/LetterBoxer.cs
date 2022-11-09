@@ -52,27 +52,17 @@ namespace io.redstart.letterboxer
 
         private void AddLetterBoxingCamera()
         {
-            // check that we don't have a camera already at -100 (lowest depth) which will cause issues
-            Camera[] allCameras = FindObjectsOfType<Camera>();
-            foreach (Camera camera in allCameras)
-            {
-                if (camera.depth == -100)
-                {
-                    Debug.LogError("Found " + camera.name + " with a depth of -100. Will cause letter boxing issues. Please increase it's depth.");
-                }
-            }
-
             // create a camera to render bcakground used for matte bars
-            letterBoxerCamera = new GameObject().AddComponent<Camera>();
+            letterBoxerCamera = new GameObject("Letter Boxer Camera").AddComponent<Camera>();
             letterBoxerCamera.backgroundColor = matteColor;
             letterBoxerCamera.cullingMask = 0;
-            letterBoxerCamera.depth = -100;
+            letterBoxerCamera.depth = int.MinValue;
             letterBoxerCamera.farClipPlane = 1;
             letterBoxerCamera.useOcclusionCulling = false;
             letterBoxerCamera.allowHDR = false;
             letterBoxerCamera.allowMSAA = false;
             letterBoxerCamera.clearFlags = CameraClearFlags.Color;
-            letterBoxerCamera.name = "Letter Boxer Camera";
+            letterBoxerCamera.transform.SetParent(transform);
         }
 
         // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
