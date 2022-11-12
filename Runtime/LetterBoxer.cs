@@ -29,7 +29,7 @@ namespace io.redstart.letterboxer
             // perform sizing if onAwake is set
             if (onAwake)
             {
-                PerformSizing();
+                SetSize();
             }
         }
 
@@ -38,7 +38,7 @@ namespace io.redstart.letterboxer
             // perform sizing if onUpdate is set
             if (onUpdate)
             {
-                PerformSizing();
+                SetSize();
             }
         }
 
@@ -66,7 +66,7 @@ namespace io.redstart.letterboxer
         }
 
         // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
-        private void PerformSizing()
+        public void SetSize()
         {
             // calc based on aspect ratio
             float targetRatio = x / y;
