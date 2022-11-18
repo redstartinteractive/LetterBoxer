@@ -14,7 +14,7 @@ namespace io.redstart.letterboxer
         SerializedProperty heightProp;
         SerializedProperty onAwakeProp;
         SerializedProperty onUpdateProp;
-
+        SerializedProperty overscanOffsetProp;
 
         void OnEnable()
         {
@@ -26,6 +26,7 @@ namespace io.redstart.letterboxer
             heightProp = serializedObject.FindProperty("height");
             onAwakeProp = serializedObject.FindProperty("onAwake");
             onUpdateProp = serializedObject.FindProperty("onUpdate");
+            overscanOffsetProp = serializedObject.FindProperty("overscanOffset");
         }
 
         override public void OnInspectorGUI()
@@ -56,6 +57,8 @@ namespace io.redstart.letterboxer
             EditorGUILayout.PropertyField(onAwakeProp, new GUIContent("On Awake", "Calculate the letterboxing during OnAwake()"));
             EditorGUILayout.PropertyField(onUpdateProp, new GUIContent("On Update", "Calculate the letterboxing during OnUpdate()"));
             EditorGUI.indentLevel--;
+
+            EditorGUILayout.PropertyField(overscanOffsetProp, new GUIContent("Overscan Offset", "Scale the screen to account for overscan"));
 
             serializedObject.ApplyModifiedProperties();
         }

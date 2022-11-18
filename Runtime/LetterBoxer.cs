@@ -6,22 +6,25 @@ namespace io.redstart.letterboxer
     {
         public enum ReferenceMode { DesignedAspectRatio, OrginalResolution };
 
-        public Color matteColor = new Color(0, 0, 0, 1);
-        public ReferenceMode referenceMode;
-        public float x = 16;
-        public float y = 9;
-        public float width = 960;
-        public float height = 540;
-        public bool onAwake = true;
-        public bool onUpdate = true;
+        [SerializeField] private Color matteColor = new Color(0, 0, 0, 1);
+        [SerializeField] private ReferenceMode referenceMode;
+        [SerializeField] private float x = 16;
+        [SerializeField] private float y = 9;
+        [SerializeField] private float width = 1920;
+        [SerializeField] private float height = 1080;
+        [SerializeField] private bool onAwake = true;
+        [SerializeField] private bool onUpdate = true;
+        [SerializeField] private float overscanOffset;
 
         private Camera cam;
         private Camera letterBoxerCamera;
+        private float lastXScreenSize;
+        private float lastYScreenSize;
 
         public void Awake()
         {
             // store reference to the camera
-            cam = GetComponent<Camera>();
+            cam = GetComponentInChildren<Camera>();
 
             // add the letterboxing camera
             AddLetterBoxingCamera();
@@ -33,12 +36,23 @@ namespace io.redstart.letterboxer
             }
         }
 
-        public void Update()
+        public void SetOverscan(float offset) {
+            overscanOffset = Mathf.Clamp(offset, -0.2f, 0);
+            SetSize();
+        }
+
+        private void Update()
         {
-            // perform sizing if onUpdate is set
-            if (onUpdate)
+            if (!onUpdate)
+            {
+                return;
+            }
+
+            if (lastXScreenSize != Screen.width || lastYScreenSize != Screen.height)
             {
                 SetSize();
+                lastXScreenSize = Screen.width;
+                lastYScreenSize = Screen.height;
             }
         }
 
@@ -56,7 +70,7 @@ namespace io.redstart.letterboxer
             letterBoxerCamera = new GameObject("Letter Boxer Camera").AddComponent<Camera>();
             letterBoxerCamera.backgroundColor = matteColor;
             letterBoxerCamera.cullingMask = 0;
-            letterBoxerCamera.depth = int.MinValue;
+            letterBoxerCamera.depth = -100;
             letterBoxerCamera.farClipPlane = 1;
             letterBoxerCamera.useOcclusionCulling = false;
             letterBoxerCamera.allowHDR = false;
@@ -83,15 +97,18 @@ namespace io.redstart.letterboxer
             // current viewport height should be scaled by this amount
             float scaleheight = windowaspect / targetRatio;
 
+            // get scale adjustment based on overscan
+            float overscan = 1f + overscanOffset;
+
             // if scaled height is less than current height, add letterbox
             if (scaleheight < 1.0f)
             {
                 Rect rect = cam.rect;
 
-                rect.width = 1.0f;
-                rect.height = scaleheight;
-                rect.x = 0;
-                rect.y = (1.0f - scaleheight) / 2.0f;
+                rect.width = 1.0f * overscan;
+                rect.height = scaleheight * overscan;
+                rect.x = (1.0f - rect.width) / 2.0f;
+                rect.y = (1.0f - rect.height) / 2.0f;
 
                 cam.rect = rect;
             }
@@ -101,10 +118,10 @@ namespace io.redstart.letterboxer
 
                 Rect rect = cam.rect;
 
-                rect.width = scalewidth;
-                rect.height = 1.0f;
-                rect.x = (1.0f - scalewidth) / 2.0f;
-                rect.y = 0;
+                rect.width = scalewidth * overscan;
+                rect.height = 1.0f * overscan;
+                rect.x = (1.0f - rect.width) / 2.0f;
+                rect.y = (1.0f - rect.height) / 2.0f;
 
                 cam.rect = rect;
             }
