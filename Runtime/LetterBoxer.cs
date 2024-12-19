@@ -14,14 +14,15 @@ namespace io.redstart.letterboxer
         [SerializeField] private float height = 1080;
         [SerializeField] private bool onAwake = true;
         [SerializeField] private bool onUpdate = true;
-        [SerializeField] private float overscanOffset;
+
+        public float OverscanOffset { get; private set; }
 
         private Camera cam;
         private Camera letterBoxerCamera;
         private float lastXScreenSize;
         private float lastYScreenSize;
 
-        public void Awake()
+        protected virtual void Awake()
         {
             // store reference to the camera
             cam = GetComponentInChildren<Camera>();
@@ -37,7 +38,7 @@ namespace io.redstart.letterboxer
         }
 
         public void SetOverscan(float offset) {
-            overscanOffset = Mathf.Clamp(offset, -0.2f, 0);
+            OverscanOffset = Mathf.Clamp(offset, -0.2f, 0);
             SetSize();
         }
 
@@ -79,9 +80,14 @@ namespace io.redstart.letterboxer
             letterBoxerCamera.transform.SetParent(transform);
         }
 
+        public virtual Rect SetSize() {
+            Rect rect = GetLetterboxedRect();
+            cam.rect = rect;
+            return rect;
+        }
+
         // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
-        public void SetSize()
-        {
+        protected Rect GetLetterboxedRect() {
             // calc based on aspect ratio
             float targetRatio = x / y;
 
@@ -98,33 +104,28 @@ namespace io.redstart.letterboxer
             float scaleheight = windowaspect / targetRatio;
 
             // get scale adjustment based on overscan
-            float overscan = 1f + overscanOffset;
+            float overscan = 1f + OverscanOffset;
+
+            Rect rect = cam.rect;
 
             // if scaled height is less than current height, add letterbox
             if (scaleheight < 1.0f)
             {
-                Rect rect = cam.rect;
-
                 rect.width = 1.0f * overscan;
                 rect.height = scaleheight * overscan;
                 rect.x = (1.0f - rect.width) / 2.0f;
                 rect.y = (1.0f - rect.height) / 2.0f;
-
-                cam.rect = rect;
             }
             else // add pillarbox
             {
                 float scalewidth = 1.0f / scaleheight;
-
-                Rect rect = cam.rect;
-
                 rect.width = scalewidth * overscan;
                 rect.height = 1.0f * overscan;
                 rect.x = (1.0f - rect.width) / 2.0f;
                 rect.y = (1.0f - rect.height) / 2.0f;
-
-                cam.rect = rect;
             }
+
+            return rect;
         }
     }
 }
