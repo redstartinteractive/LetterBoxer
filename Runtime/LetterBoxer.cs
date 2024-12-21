@@ -24,13 +24,8 @@ namespace io.redstart.letterboxer
 
         protected virtual void Awake()
         {
-            // store reference to the camera
             cam = GetComponentInChildren<Camera>();
-
-            // add the letterboxing camera
             AddLetterBoxingCamera();
-
-            // perform sizing if onAwake is set
             if (onAwake)
             {
                 SetSize();
@@ -67,7 +62,7 @@ namespace io.redstart.letterboxer
 
         private void AddLetterBoxingCamera()
         {
-            // create a camera to render bcakground used for matte bars
+            // create a camera to render background used for matte bars
             letterBoxerCamera = new GameObject("Letter Boxer Camera").AddComponent<Camera>();
             letterBoxerCamera.backgroundColor = matteColor;
             letterBoxerCamera.cullingMask = 0;
@@ -77,17 +72,21 @@ namespace io.redstart.letterboxer
             letterBoxerCamera.allowHDR = false;
             letterBoxerCamera.allowMSAA = false;
             letterBoxerCamera.clearFlags = CameraClearFlags.Color;
+            letterBoxerCamera.orthographic = true;
             letterBoxerCamera.transform.SetParent(transform);
         }
 
-        public virtual Rect SetSize() {
+        public virtual Rect SetSize()
+        {
             Rect rect = GetLetterboxedRect();
             cam.rect = rect;
+            letterBoxerCamera.enabled = OverscanOffset != 0;
             return rect;
         }
 
         // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
-        protected Rect GetLetterboxedRect() {
+        protected Rect GetLetterboxedRect()
+        {
             // calc based on aspect ratio
             float targetRatio = x / y;
 
