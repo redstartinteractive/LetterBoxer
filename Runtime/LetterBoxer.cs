@@ -17,7 +17,7 @@ namespace io.redstart.letterboxer
 
         public float OverscanOffset { get; private set; }
 
-        private Camera cam;
+        protected Camera cam;
         private Camera letterBoxerCamera;
         private float lastXScreenSize;
         private float lastYScreenSize;
