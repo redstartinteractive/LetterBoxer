@@ -80,7 +80,7 @@ namespace io.redstart.letterboxer
         {
             Rect rect = GetLetterboxedRect();
             cam.rect = rect;
-            letterBoxerCamera.enabled = OverscanOffset != 0;
+            letterBoxerCamera.enabled = !Mathf.Approximately(rect.height, 1f) || !Mathf.Approximately(rect.width, 1f);
             return rect;
         }
 
