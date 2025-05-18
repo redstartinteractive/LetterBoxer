@@ -15,6 +15,7 @@ namespace io.redstart.letterboxer
         [SerializeField] private bool onAwake = true;
         [SerializeField] private bool onUpdate = true;
 
+        public Camera LetterBoxerCamera => letterBoxerCamera;
         public float OverscanOffset { get; private set; }
 
         protected Camera cam;
