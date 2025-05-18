@@ -7,9 +7,9 @@ namespace io.redstart.letterboxer
     {
         private UniversalAdditionalCameraData cameraData;
 
-        protected override void Awake()
+        protected override void SetMainCamera()
         {
-            base.Awake();
+            base.SetMainCamera();
             cameraData = cam.GetUniversalAdditionalCameraData();
         }
 

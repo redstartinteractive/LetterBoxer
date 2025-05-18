@@ -23,9 +23,9 @@ namespace io.redstart.letterboxer
         private float lastXScreenSize;
         private float lastYScreenSize;
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            cam = GetComponentInChildren<Camera>();
+            SetMainCamera();
             AddLetterBoxingCamera();
             if (onAwake)
             {
@@ -60,6 +60,11 @@ namespace io.redstart.letterboxer
             width = Mathf.Max(1, width);
             height = Mathf.Max(1, height);
         }
+
+		protected virtual void SetMainCamera()
+		{
+			cam = GetComponentInChildren<Camera>();
+		}
 
         private void AddLetterBoxingCamera()
         {
